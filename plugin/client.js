@@ -204,6 +204,12 @@ return {
       '.dtr-preset-save{display:flex;align-items:center;gap:4px}',
       '.dtr-preset-name-input{flex:1;min-width:0;border:1px solid var(--dsw-alias-border-inverted);color:var(--dsw-alias-label-primary);background:transparent;border-radius:6px;outline:none;padding:3px 6px;font-size:12px}',
       '.dtr-preset-name-input:focus{border-color:var(--dsw-alias-brand-primary)}',
+      '.dtr-preset-chips{display:flex;flex-wrap:wrap;gap:6px}',
+      '.dtr-preset-chip{display:inline-flex;align-items:center;gap:4px;height:26px;max-width:100%;padding:0 6px 0 12px;border-radius:14px;background:var(--dsw-alias-interactive-bg-hover);color:var(--dsw-alias-label-primary);font-size:12px;line-height:18px;cursor:pointer;user-select:none;-webkit-user-select:none}',
+      '.dtr-preset-chip:hover{background:var(--dsw-alias-interactive-bg-hover-solid)}',
+      '.dtr-preset-chip-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px}',
+      '.dtr-preset-chip-x{flex:none;width:16px;height:16px;border:none;border-radius:50%;background:transparent;color:var(--dsw-alias-label-tertiary);cursor:pointer;font-size:12px;line-height:1;display:inline-flex;align-items:center;justify-content:center;padding:0}',
+      '.dtr-preset-chip-x:hover{background:var(--dsw-alias-interactive-bg-hover);color:var(--dsw-alias-state-error-primary)}',
       '.dtr-settings{display:flex;flex-direction:column;width:100%}',
       '.dtr-row{border-bottom:1px solid var(--dsw-alias-border-l2);align-items:center;gap:8px;padding:16px 0;display:flex}',
       '.dtr-rowText{flex-direction:column;flex:1;gap:4px;min-width:0;padding-right:48px;display:flex}',
@@ -339,7 +345,7 @@ return {
       );
     }
 
-    function StylePresets() {
+    function StylePresets({ variant }) {
       const s = useCfg();
       useLocaleTick();
       const presets = s.stylePresets || [];
@@ -363,6 +369,46 @@ return {
         const cur = getState();
         setState({ stylePresets: (cur.stylePresets || []).filter((p) => p.id !== id) });
       };
+      const saveRow = React.createElement('div', { className: 'dtr-preset-save' },
+        React.createElement('input', {
+          className: 'dtr-preset-name-input',
+          value: name,
+          placeholder: t('presetNamePlaceholder'),
+          onChange: (e) => setName(e.target.value),
+          onKeyDown: (e) => { if (e.key === 'Enter') { e.preventDefault(); savePreset(); } }
+        }),
+        React.createElement('button', {
+          type: 'button',
+          className: 'dtr-preset-btn',
+          disabled: !name.trim(),
+          onClick: savePreset
+        }, t('savePreset'))
+      );
+      if (variant === 'chips') {
+        // 风格面板内：保存输入框在上，预设为横向胶囊（预设名即按钮，点击应用，× 删除）
+        return React.createElement('div', { className: 'dtr-presets' },
+          saveRow,
+          presets.length === 0
+            ? React.createElement('div', { className: 'dtr-desc' }, t('noPresets'))
+            : React.createElement('div', { className: 'dtr-preset-chips' },
+                presets.map((p) => React.createElement('span', {
+                  key: p.id,
+                  className: 'dtr-preset-chip',
+                  title: p.style,
+                  onClick: () => applyPreset(p)
+                },
+                  React.createElement('span', { className: 'dtr-preset-chip-name' }, p.name),
+                  React.createElement('button', {
+                    type: 'button',
+                    className: 'dtr-preset-chip-x',
+                    title: t('deletePreset'),
+                    onClick: (e) => { e.stopPropagation(); removePreset(p.id); }
+                  }, '×')
+                ))
+              )
+        );
+      }
+      // 设置页内：管理列表（名称 + 应用 + 删除）+ 保存行
       return React.createElement('div', { className: 'dtr-presets' },
         React.createElement('div', { className: 'dtr-preset-list' },
           presets.length === 0
@@ -383,21 +429,7 @@ return {
                 }, '×')
               ))
         ),
-        React.createElement('div', { className: 'dtr-preset-save' },
-          React.createElement('input', {
-            className: 'dtr-preset-name-input',
-            value: name,
-            placeholder: t('presetNamePlaceholder'),
-            onChange: (e) => setName(e.target.value),
-            onKeyDown: (e) => { if (e.key === 'Enter') { e.preventDefault(); savePreset(); } }
-          }),
-          React.createElement('button', {
-            type: 'button',
-            className: 'dtr-preset-btn',
-            disabled: !name.trim(),
-            onClick: savePreset
-          }, t('savePreset'))
-        )
+        saveRow
       );
     }
 
@@ -553,7 +585,7 @@ return {
           placeholder: t('stylePlaceholder')
         }),
         React.createElement('div', { className: 'dtr-hint' }, t('styleHint')),
-        React.createElement(StylePresets, null)
+        React.createElement(StylePresets, { variant: 'chips' })
       );
     }
 
