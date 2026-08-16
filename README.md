@@ -1,6 +1,6 @@
 # dsh-translate — DeepSeek Harness 翻译模式
 
-为 [DeepSeek Harness](https://github.com/deepseek-ai) 桌面端添加「翻译模式」：与标准模式/创造模式并列的 Agent 预设——**发送原文，模型只返回译文**。
+为 [DeepSeek Harness](https://github.com/deepseek-ai)（WebUI 与桌面版通用）添加「翻译模式」：与标准模式/创造模式并列的 Agent 预设——**发送原文，模型只返回译文**。
 
 ## 功能
 
@@ -28,13 +28,13 @@ Copy-Item -Recurse .\agent-preset "$env:USERPROFILE\.dsh\.agent-presets\translat
 
 ### 2. 本地插件（设置 → 插件）
 
-将 `local-plugin/` 复制为用户级本地插件，并挂载到桌面 profile：
+将 `local-plugin/` 复制为用户级本地插件（`profiles/node_modules` 是所有 profile 共享的扁平模块目录，WebUI 与桌面版都从这里解析）：
 
 ```powershell
 Copy-Item -Recurse .\local-plugin "$env:USERPROFILE\.dsh\profiles\node_modules\dsh-plugin-translate"
 ```
 
-在 `$env:USERPROFILE\.dsh\profiles\desktop\cordis.patch.yml` 追加：
+在用户级补丁 `$env:USERPROFILE\.dsh\cordis.patch.yml` 追加（home 级补丁对所有 profile 生效，无需区分 WebUI / 桌面版；文件不存在则新建）：
 
 ```yaml
 - insert:
@@ -42,7 +42,7 @@ Copy-Item -Recurse .\local-plugin "$env:USERPROFILE\.dsh\profiles\node_modules\d
       name: dsh-plugin-translate
 ```
 
-**重启 DSH Desktop**。之后 设置 → 插件 中出现 `dsh-plugin-translate`，翻译模式会话的输入框工具行即出现语言控件与「风格设置」。
+**重启 Harness（WebUI 或桌面版均可）**。之后 设置 → 插件 中出现 `dsh-plugin-translate`，翻译模式会话的输入框工具行即出现语言控件与「风格设置」。
 
 > 备选：动态插件方式（无需重启）。在「创造模式」会话中，用 `cordis_define` 定义动态插件：
 >
@@ -60,7 +60,7 @@ agent-preset/           翻译模式 Agent 预设（可直接复制到 ~/.dsh/.a
 plugin/
   host.js               动态插件宿主端（saveSettings RPC、设置变更通告、translate_diag）
   client.js             动态插件浏览器端（工具行控件、语言菜单、风格面板、18 语字典）
-local-plugin/           静态本地包（设置 → 插件 安装方式；与 plugin/ 同源实现）
+local-plugin/           静态本地包（设置 → 插件 安装方式，WebUI 与桌面版通用；与 plugin/ 同源实现）
   package.json          dsh.client 声明（platform: web）、exports ./client
   lib/index.js          宿主端：/dsh-translate/settings 路由、pre-step 通告、translate_diag
   lib/client.js         浏览器端：__ModuleLoader__ 打包格式（require('react')、slots.inject）
