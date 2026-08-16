@@ -13,7 +13,7 @@ if (!match) {
 // 纯对象字面量，eval 安全
 const DICTS = eval('(' + match[1] + ')');
 
-const KEYS = ['auto', 'searchPlaceholder', 'sourceTitle', 'targetTitle', 'addTitle', 'deleteTitle', 'styleButton', 'styleTitle', 'styleHint', 'stylePlaceholder', 'swapTitle', 'settingsTitle', 'prefSource', 'prefTarget', 'allowSame', 'allowSameHint', 'stylePresetsTitle', 'savePreset', 'presetNamePlaceholder', 'applyPreset', 'deletePreset', 'noPresets'];
+const KEYS = ['auto', 'searchPlaceholder', 'sourceTitle', 'targetTitle', 'addTitle', 'deleteTitle', 'styleButton', 'styleTitle', 'styleHint', 'stylePlaceholder', 'swapTitle', 'settingsTitle', 'prefSource', 'prefTarget', 'allowSame', 'allowSameHint', 'stylePresetsTitle', 'savePreset', 'presetNamePlaceholder', 'applyPreset', 'deletePreset', 'noPresets', 'editPreset', 'saveChanges', 'clearAllPresets'];
 const LANGS = ['zh', 'en', 'ja', 'ko', 'fr', 'de', 'es', 'ru', 'pt', 'it', 'ar', 'hi', 'th', 'vi', 'nl', 'pl', 'tr', 'uk'];
 
 function lookup(active, key) {
