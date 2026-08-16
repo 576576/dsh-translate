@@ -63,4 +63,4 @@ node i18n-self-test.mjs
 
 ## License
 
-MIT（尚未添加 LICENSE 文件，如需请告知）
+MIT（LICENSE 文件，作者 576576）
