@@ -123,9 +123,19 @@ return {
 
     ctx.effect(() => harness.handle('getState', () => ({ cfg })), 'dsh-translate: getState rpc');
 
-    ctx.on('agent/pre-step', async ({ messages }, next) => {
+    ctx.on('agent/pre-step', async ({ agent, messages }, next) => {
       const decision = await next();
       if (decision.kind !== 'enter') return decision;
+      // 绝对只在翻译模式会话注入：非翻译模式即使设置变更也不注入任何上下文
+      const presets = ctx.get('agentPresets');
+      if (!presets) return decision;
+      let inTranslate = false;
+      try {
+        inTranslate = presets.composedPreset(agent && agent.ctx) === 'translate';
+      } catch (e) {
+        inTranslate = false;
+      }
+      if (!inTranslate) return decision;
       const claimed = new Set((messages || []).filter((m) => m && m.source && m.source.kind === 'user'));
       if (claimed.size === 0) return decision;
       const signature = settingsSignature(cfg);
