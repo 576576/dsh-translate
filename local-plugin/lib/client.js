@@ -186,6 +186,7 @@ window.__ModuleLoader__.load({
 				'.dtr-swap:hover:not(:disabled){background:var(--dsw-alias-interactive-bg-hover)}',
 				'.dtr-swap:disabled{opacity:.4;cursor:default}',
 				'.dtr-menu{position:absolute;bottom:calc(100% + 8px);left:0;z-index:100;min-width:max(220px,100%);border:1px solid var(--dsw-alias-border-inverted);background:var(--dsw-specific-menu);box-shadow:var(--dsw-shadow-lv3);color:var(--dsw-alias-label-primary);border-radius:12px;padding:4px;display:flex;flex-direction:column;gap:2px}',
+				'.dtr-menu-down{top:calc(100% + 8px);bottom:auto}',
 				'.dtr-menu-searchrow{display:flex;align-items:center;gap:4px;padding:0 2px 4px}',
 				'.dtr-menu-search{flex:1;min-width:0;border:1px solid var(--dsw-alias-border-inverted);color:var(--dsw-alias-label-primary);background:transparent;border-radius:8px;outline:none;padding:5px 8px;font-size:13px}',
 				'.dtr-menu-search:focus{border-color:var(--dsw-alias-brand-primary)}',
@@ -323,7 +324,7 @@ window.__ModuleLoader__.load({
 							React.createElement('path', { d: 'M3 4.5L6 7.5L9 4.5', fill: 'none', stroke: 'currentColor', strokeWidth: '1.5', strokeLinecap: 'round', strokeLinejoin: 'round' })
 						)
 					),
-					open ? React.createElement('div', { className: 'dtr-menu' },
+					open ? React.createElement('div', { className: 'dtr-menu' + (variant === 'settings' ? ' dtr-menu-down' : '') },
 						React.createElement('div', { className: 'dtr-menu-searchrow' },
 							React.createElement('input', {
 								className: 'dtr-menu-search',
