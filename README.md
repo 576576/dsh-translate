@@ -11,6 +11,8 @@
   - 语言菜单：搜索框 + 自定义语言键入（加号添加到源与目标选择范围，自定义语言可删除），选中行持久高亮
   - 交换按钮提示按源语言本地化（Swap languages / 言語を交換 …），自定义语言回退英文
 - **风格设置面板**：输入框左上锚点就地展开，与加号/斜杠菜单天然互斥，点击输入框不收回、开始键入即收回，修改自动保存并**全局生效**（写入 `<DSH_HOME>/translate-settings.json`，所有翻译模式会话即时采用）
+- **风格预设**：在风格面板或设置页中把当前风格「保存为预设」（同名覆盖），一键「应用」加载，可删除；预设列表全局共享（localStorage）
+- **设置页「翻译模式」**（设置 → 翻译模式）：首选项源/目标语言、允许源和目标语言相同（关闭后源与目标菜单互相排除，已有相同组合自动纠正为自动检测）、风格预设管理
 - **变更同步**：更改语言/风格后发送消息时，会话自动插入「翻译设置」上下文，模型与对话记录同步得知变更
 - **i18n**：界面文案字典覆盖插件列出的全部 18 种语言（未命中回退中文），随界面语言即时切换
 
@@ -64,7 +66,7 @@ local-plugin/           静态本地包（设置 → 插件 安装方式，WebUI
   package.json          dsh.client 声明（platform: web）、exports ./client
   lib/index.js          宿主端：/dsh-translate/settings 路由、pre-step 通告、translate_diag
   lib/client.js         浏览器端：__ModuleLoader__ 打包格式（require('react')、slots.inject）
-i18n-self-test.mjs      本地化自测：18 语言 × 10 键全量断言（node i18n-self-test.mjs）
+i18n-self-test.mjs      本地化自测：18 语言 × 22 键全量断言（node i18n-self-test.mjs）
 ```
 
 ## 工作原理
