@@ -176,6 +176,7 @@ window.__ModuleLoader__.load({
 				'.dtr-tools{display:inline-flex;align-items:center;gap:2px;min-width:0}',
 				'.dtr-root{position:relative;display:inline-flex;min-width:0}',
 				'.dtr-trigger{min-width:0;max-width:200px;height:28px;color:var(--dsw-alias-label-secondary);white-space:nowrap;cursor:pointer;background:transparent;border:none;border-radius:24px;outline:none;padding:0 4px 0 8px;font-size:13px;font-weight:500;line-height:20px;display:inline-flex;align-items:center;gap:4px}',
+				'.dtr-trigger.dtr-pill{padding:0 8px}',
 				'.dtr-trigger:hover:not(:disabled){background:var(--dsw-alias-interactive-bg-hover)}',
 				'.dtr-trigger.dtr-active{color:var(--dsw-alias-brand-primary)}',
 				'.dtr-trigger-label{text-overflow:ellipsis;white-space:nowrap;min-width:0;overflow:hidden}',
@@ -476,7 +477,7 @@ window.__ModuleLoader__.load({
 					React.createElement(LangMenu, { kind: 'target' }),
 					React.createElement('button', {
 						type: 'button',
-						className: 'dtr-trigger' + (s.dialogOpen ? ' dtr-active' : ''),
+						className: 'dtr-trigger dtr-pill' + (s.dialogOpen ? ' dtr-active' : ''),
 						title: t('styleTitle'),
 						onClick: (e) => {
 							if (s.dialogOpen) {
