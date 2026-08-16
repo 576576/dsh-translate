@@ -26,15 +26,29 @@ Copy-Item -Recurse .\agent-preset "$env:USERPROFILE\.dsh\.agent-presets\translat
 
 新建会话 → 预设选择器 → 「翻译模式」。
 
-### 2. 动态插件（控件）
+### 2. 本地插件（设置 → 插件）
 
-在「创造模式」会话中，用 `cordis_define` 定义动态插件：
+将 `local-plugin/` 复制为用户级本地插件，并挂载到桌面 profile：
 
-- `code.host` ← `plugin/host.js` 内容
-- `code.client` ← `plugin/client.js` 内容
-- 插件对象 `inject: ['slots', 'locale']`
+```powershell
+Copy-Item -Recurse .\local-plugin "$env:USERPROFILE\.dsh\profiles\node_modules\dsh-plugin-translate"
+```
 
-激活后，翻译模式会话的输入框工具行即出现语言控件与「风格设置」。
+在 `$env:USERPROFILE\.dsh\profiles\desktop\cordis.patch.yml` 追加：
+
+```yaml
+- insert:
+    - id: dsh-translate
+      name: dsh-plugin-translate
+```
+
+**重启 DSH Desktop**。之后 设置 → 插件 中出现 `dsh-plugin-translate`，翻译模式会话的输入框工具行即出现语言控件与「风格设置」。
+
+> 备选：动态插件方式（无需重启）。在「创造模式」会话中，用 `cordis_define` 定义动态插件：
+>
+> - `code.host` ← `plugin/host.js` 内容
+> - `code.client` ← `plugin/client.js` 内容
+> - 插件对象 `inject: ['slots', 'locale']`
 
 ## 目录结构
 
@@ -46,13 +60,17 @@ agent-preset/           翻译模式 Agent 预设（可直接复制到 ~/.dsh/.a
 plugin/
   host.js               动态插件宿主端（saveSettings RPC、设置变更通告、translate_diag）
   client.js             动态插件浏览器端（工具行控件、语言菜单、风格面板、18 语字典）
+local-plugin/           静态本地包（设置 → 插件 安装方式；与 plugin/ 同源实现）
+  package.json          dsh.client 声明（platform: web）、exports ./client
+  lib/index.js          宿主端：/dsh-translate/settings 路由、pre-step 通告、translate_diag
+  lib/client.js         浏览器端：__ModuleLoader__ 打包格式（require('react')、slots.inject）
 i18n-self-test.mjs      本地化自测：18 语言 × 10 键全量断言（node i18n-self-test.mjs）
 ```
 
 ## 工作原理
 
 1. 预设 persona 声明翻译模式行为；`lib/settings.js` 注册 `{{translatesource}}/{{translatetarget}}/{{translatestyle}}` 变量，每次组装时读取 `<DSH_HOME>/translate-settings.json`
-2. 控件改动经 `saveSettings` RPC 写入共享设置文件（显式 workspace-write 沙箱策略）
+2. 控件改动经宿主端持久化（动态插件：`saveSettings` RPC；本地插件：`POST /dsh-translate/settings`）写入共享设置文件（显式 workspace-write 沙箱策略）
 3. 宿主端 `agent/pre-step` 拦截：设置变更后，首条用户消息前插入「翻译设置」上下文（内存配置，无文件竞态，去重通告）
 
 ## 自测
