@@ -203,12 +203,15 @@ return {
       '.dtr-preset-save{display:flex;align-items:center;gap:4px}',
       '.dtr-preset-name-input{flex:1;min-width:0;border:1px solid var(--dsw-alias-border-inverted);color:var(--dsw-alias-label-primary);background:transparent;border-radius:6px;outline:none;padding:3px 6px;font-size:12px}',
       '.dtr-preset-name-input:focus{border-color:var(--dsw-alias-brand-primary)}',
-      '.dtr-settings{display:flex;flex-direction:column;gap:18px;padding:4px 2px}',
-      '.dtr-setting-row{display:flex;align-items:center;justify-content:space-between;gap:12px}',
-      '.dtr-setting-info{display:flex;flex-direction:column;gap:2px;min-width:0}',
-      '.dtr-setting-label{font-size:13px;line-height:20px;color:var(--dsw-alias-label-primary)}',
-      '.dtr-setting-block{display:flex;flex-direction:column;gap:8px}',
-      '.dtr-toggle{flex:none;width:36px;height:20px;border-radius:10px;border:none;background:var(--dsw-alias-interactive-bg-hover);cursor:pointer;position:relative;transition:background .15s;padding:0}',
+      '.dtr-settings{display:flex;flex-direction:column;width:100%}',
+      '.dtr-row{border-bottom:1px solid var(--dsw-alias-border-l2);align-items:center;gap:8px;padding:16px 0;display:flex}',
+      '.dtr-rowText{flex-direction:column;flex:1;gap:4px;min-width:0;padding-right:48px;display:flex}',
+      '.dtr-title{color:var(--dsw-alias-label-primary);font-size:14px;font-weight:400;line-height:22px}',
+      '.dtr-desc{color:var(--dsw-alias-label-tertiary);font-size:12px;font-weight:400;line-height:18px}',
+      '.dtr-sel{background:var(--dsw-alias-bg-module-platform);height:36px;font:inherit;color:var(--dsw-alias-label-primary);cursor:pointer;border:none;border-radius:18px;align-items:center;gap:12px;padding:0 14px;font-size:14px;line-height:22px;display:inline-flex}',
+      '.dtr-sel:hover{background:var(--dsw-alias-interactive-bg-hover)}',
+      '.dtr-block{border-bottom:1px solid var(--dsw-alias-border-l2);flex-direction:column;gap:8px;padding:16px 0;display:flex}',
+      '.dtr-toggle{flex:none;width:36px;height:20px;border-radius:10px;border:none;background:var(--dsw-alias-bg-module-platform);cursor:pointer;position:relative;transition:background .15s;padding:0}',
       '.dtr-toggle.dtr-on{background:var(--dsw-alias-brand-primary)}',
       '.dtr-toggle-knob{position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--dsw-specific-menu);transition:transform .15s;box-shadow:0 1px 2px rgba(0,0,0,.25)}',
       '.dtr-toggle.dtr-on .dtr-toggle-knob{transform:translateX(16px)}'
@@ -225,7 +228,7 @@ return {
       }, [s.cfg.allowSame, s.cfg.source, s.cfg.target]);
     }
 
-    function LangMenu({ kind }) {
+    function LangMenu({ kind, variant }) {
       const s = useCfg();
       const cfg = s.cfg;
       const custom = s.custom;
@@ -283,7 +286,7 @@ return {
       return React.createElement('div', { ref: rootRef, className: 'dtr-root' },
         React.createElement('button', {
           type: 'button',
-          className: 'dtr-trigger',
+          className: variant === 'settings' ? 'dtr-sel' : 'dtr-trigger',
           title: kind === 'source' ? t('sourceTitle') : t('targetTitle'),
           onClick: () => setState({ menu: open ? null : kind })
         },
@@ -362,7 +365,7 @@ return {
       return React.createElement('div', { className: 'dtr-presets' },
         React.createElement('div', { className: 'dtr-preset-list' },
           presets.length === 0
-            ? React.createElement('div', { className: 'dtr-hint' }, t('noPresets'))
+            ? React.createElement('div', { className: 'dtr-desc' }, t('noPresets'))
             : presets.map((p) => React.createElement('div', { key: p.id, className: 'dtr-preset-row' },
                 React.createElement('span', { className: 'dtr-preset-name', title: p.style }, p.name),
                 React.createElement('button', {
@@ -559,18 +562,22 @@ return {
       useLocaleTick();
       useCfgGuard();
       return React.createElement('div', { className: 'dtr-settings' },
-        React.createElement('div', { className: 'dtr-setting-row' },
-          React.createElement('div', { className: 'dtr-setting-label' }, t('prefSource')),
-          React.createElement(LangMenu, { kind: 'source' })
+        React.createElement('div', { className: 'dtr-row' },
+          React.createElement('div', { className: 'dtr-rowText' },
+            React.createElement('div', { className: 'dtr-title' }, t('prefSource'))
+          ),
+          React.createElement(LangMenu, { kind: 'source', variant: 'settings' })
         ),
-        React.createElement('div', { className: 'dtr-setting-row' },
-          React.createElement('div', { className: 'dtr-setting-label' }, t('prefTarget')),
-          React.createElement(LangMenu, { kind: 'target' })
+        React.createElement('div', { className: 'dtr-row' },
+          React.createElement('div', { className: 'dtr-rowText' },
+            React.createElement('div', { className: 'dtr-title' }, t('prefTarget'))
+          ),
+          React.createElement(LangMenu, { kind: 'target', variant: 'settings' })
         ),
-        React.createElement('div', { className: 'dtr-setting-row' },
-          React.createElement('div', { className: 'dtr-setting-info' },
-            React.createElement('div', { className: 'dtr-setting-label' }, t('allowSame')),
-            React.createElement('div', { className: 'dtr-hint' }, t('allowSameHint'))
+        React.createElement('div', { className: 'dtr-row' },
+          React.createElement('div', { className: 'dtr-rowText' },
+            React.createElement('div', { className: 'dtr-title' }, t('allowSame')),
+            React.createElement('div', { className: 'dtr-desc' }, t('allowSameHint'))
           ),
           React.createElement('button', {
             type: 'button',
@@ -582,8 +589,8 @@ return {
             React.createElement('span', { className: 'dtr-toggle-knob' })
           )
         ),
-        React.createElement('div', { className: 'dtr-setting-block' },
-          React.createElement('div', { className: 'dtr-setting-label' }, t('stylePresetsTitle')),
+        React.createElement('div', { className: 'dtr-block' },
+          React.createElement('div', { className: 'dtr-title' }, t('stylePresetsTitle')),
           React.createElement(StylePresets, null)
         )
       );
@@ -591,6 +598,6 @@ return {
 
     ctx.effect(() => ctx.slots.register({ name: 'conversation.input.right', id: 'translate-mode', order: 0, label: '翻译模式' }, TranslateControls), 'dsh-translate: tools');
     ctx.effect(() => ctx.slots.register({ name: 'conversation.input.overlay', id: 'translate-style', order: 10, label: '翻译风格设置' }, StyleSettingsPanel), 'dsh-translate: style panel');
-    ctx.effect(() => ctx.slots.register({ name: 'settings.section', id: 'translate-settings', order: 80, label: t('settingsTitle') }, SettingsPage), 'dsh-translate: settings page');
+    ctx.effect(() => ctx.slots.register({ name: 'settings.section', id: 'translate-settings', order: 80, label: () => t('settingsTitle') }, SettingsPage), 'dsh-translate: settings page');
   }
 };
