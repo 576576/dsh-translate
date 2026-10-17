@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Modo de tradução",
+    "description": "Adiciona um preset de agente que retorna apenas a tradução, com idioma de origem/destino, troca e estilo de tradução na barra de entrada."
+  }
+}

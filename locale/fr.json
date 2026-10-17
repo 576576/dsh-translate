@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Mode traduction",
+    "description": "Ajoute un preset d'agent qui ne renvoie que la traduction, avec langue source/cible, inversion et style de traduction dans la barre de saisie."
+  }
+}

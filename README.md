@@ -11,7 +11,7 @@
 - **风格菜单**：与语言菜单同款浮层卡，从「风格设置」触发器上方弹出；文本域自动保存（300ms 防抖），风格预设可保存/应用/删除。
 - **设置页「翻译模式」**（设置 → 翻译模式）：优先源/目标语言、允许同语言开关、风格预设管理，行样式对齐原生 preference row。
 - **持久化**：唯一事实来源是 `<DSH_HOME>/translate-settings.json`；localStorage 只作首屏缓存。
-- **i18n**：18 种界面语言的界面文案（含新增 `autoTarget`），随界面语言即时切换。
+- **i18n**：18 种界面语言的界面文案（含新增 `autoTarget`），随界面语言即时切换；插件管理页的标题/描述同样覆盖 18 种语言。
 
 ## 目标语言 `auto`
 
@@ -47,7 +47,7 @@ lib/preset.js         预设作用域内的 prompt 变量提供者（translateso
 lib/store.js          唯一持久层：<DSH_HOME>/translate-settings.json（原子写、默认值合并、旧文件迁移）
 lib/languages.js      语言标签与 target=auto 的规则渲染
 lib/client.js         客户端半体（__ModuleLoader__ 预构建；输入框工具行 + 设置页两处 slot 注册）
-locale/{en,zh}.json   插件管理页标题与描述
+locale/*.json         插件管理页标题与描述（18 种界面语言）
 icon.svg              插件图标
 test/                 i18n 自测 + 宿主/客户端 stub 冒烟测试
 ```

@@ -1,6 +1,6 @@
 {
   "meta": {
     "title": "Translation Mode",
-    "description": "Adds a translate-only agent preset with source/target language, swap and translation-style controls in the composer."
+    "description": "Adds a translate-only agent preset, with source/target language, swap and translation-style controls in the composer tool row."
   }
 }

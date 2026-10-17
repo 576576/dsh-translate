@@ -1,12 +1,16 @@
-// Localization self-test: reads the client bundle's `DICTS` literal directly,
-// so the check can never drift from the shipped dictionaries. Validates that
-// every locale exists, carries exactly the same key set as zh, has no empty
-// values, never shows a raw key, and never falls back to the zh text.
-import { readFileSync } from 'node:fs'
+// Localization self-test.
+//
+// 1. Reads the client bundle's `DICTS` literal directly, so the UI-text check
+//    can never drift from the shipped dictionaries.
+// 2. Checks the plugin-inventory locale resources (`locale/<id>.json`) cover
+//    every client locale and carry non-empty `meta.title` / `meta.description`.
+import { readdirSync, readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-const file = fileURLToPath(new URL('../lib/client.js', import.meta.url))
-const code = readFileSync(file, 'utf8')
+const clientFile = fileURLToPath(new URL('../lib/client.js', import.meta.url))
+const localeDir = fileURLToPath(new URL('../locale/', import.meta.url))
+const code = readFileSync(clientFile, 'utf8')
 
 const start = code.indexOf('const DICTS = {')
 if (start < 0) throw new Error('DICTS block not found in lib/client.js')
@@ -65,8 +69,38 @@ for (const id of LANGS) {
 
 console.log(rows.join('\n'))
 console.log('---')
+
+// Plugin-inventory locale resources.
+const files = readdirSync(localeDir)
+  .filter((name) => name.endsWith('.json'))
+  .map((name) => name.slice(0, -5))
+  .sort()
+const missingFiles = LANGS.filter((id) => !files.includes(id))
+const extraFiles = files.filter((id) => !LANGS.includes(id))
+for (const id of LANGS) {
+  if (!files.includes(id)) continue
+  const body = JSON.parse(readFileSync(join(localeDir, `${id}.json`), 'utf8'))
+  const ok = Boolean(body && body.meta && typeof body.meta.title === 'string' && body.meta.title !== '' &&
+    typeof body.meta.description === 'string' && body.meta.description !== '')
+  if (!ok) {
+    failures += 1
+    console.log(`FAIL  ${id.padEnd(3)} inventory locale lacks meta.title / meta.description`)
+  }
+}
+const inventoryOk = missingFiles.length === 0 && extraFiles.length === 0
+if (!inventoryOk) failures += 1
+console.log(
+  `${inventoryOk ? 'PASS' : 'FAIL'}  locale  inventory files: ${files.length}/${LANGS.length}` +
+    (inventoryOk ? '' : ` 缺:${missingFiles.join(',')} 多:${extraFiles.join(',')}`)
+)
+
+console.log('---')
 console.log(
   `样例: ja.auto = ${DICTS.ja.auto} | uk.searchPlaceholder = ${DICTS.uk.searchPlaceholder.slice(0, 28)}… | en.styleButton = ${DICTS.en.styleButton} | zh.autoTarget = ${DICTS.zh.autoTarget}`
 )
-console.log(failures === 0 ? `ALL PASS (${LANGS.length} locales × ${KEYS.length} keys)` : `${failures} LOCALES FAILED`)
+console.log(
+  failures === 0
+    ? `ALL PASS (${LANGS.length} locales × ${KEYS.length} keys, ${files.length} inventory locales)`
+    : `${failures} CHECKS FAILED`
+)
 process.exit(failures === 0 ? 0 : 1)

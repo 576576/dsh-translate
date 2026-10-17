@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Vertaalmodus",
+    "description": "Voegt een agentpreset toe die alleen de vertaling teruggeeft, met bron-/doeltaal, wisselen en vertaalstijl in de invoerbalk."
+  }
+}
