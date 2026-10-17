@@ -6,7 +6,7 @@
 
 [中文](../../README.md) | English
 
-Adds a **Translation Mode** to [DeepSeek Harness](https://github.com/deepseek-ai) (Web UI and desktop): an agent preset that returns only the translation, plus language-direction and translation-style controls in the composer tool row.
+Adds a **Translation Mode** to [DeepSeek Harness](https://github.com/deepseek-ai): an agent preset that returns only the translation, plus language-direction and translation-style controls in the composer tool row.
 
 ## Features
 

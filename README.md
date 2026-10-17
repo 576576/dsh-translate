@@ -6,7 +6,7 @@
 
 中文 | [English](docs/en/README.md)
 
-为 [DeepSeek Harness](https://github.com/deepseek-ai)（Web UI 与桌面版通用）添加「翻译模式」：一个只返回译文的 Agent 预设，以及输入框工具行上的语言方向与翻译风格控件。
+为 [DeepSeek Harness](https://github.com/deepseek-ai) 添加「翻译模式」：一个只返回译文的 Agent 预设，以及输入框工具行上的语言方向与翻译风格控件。
 
 ## 功能
 
