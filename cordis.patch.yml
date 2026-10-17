@@ -1,0 +1,39 @@
+# dsh-plugin-translate bundle patch.
+#
+# Two rows:
+#  - `dsh-translate`: the Host half (settings store + HTTP route + diagnostics).
+#  - `preset-translate`: the `translate` agent preset declaration. The preset
+#    mounts the shipped persona row (identity) and this package's preset-scoped
+#    prompt-variable provider, which feeds {{translatesource}},
+#    {{translatetarget}} and {{translatestyle}} from the settings store.
+- insert:
+    - id: dsh-translate
+      name: dsh-plugin-translate
+    - id: preset-translate
+      name: '@deepseek-ai/dsh-agent-preset'
+      config:
+        id: translate
+        name: 翻译模式
+        description: 只做翻译的 Agent：发送原文，模型仅返回译文。语言方向与翻译风格可在会话中输入框下方设置。
+        order: 5
+        plugins:
+          - id: persona
+            name: '@deepseek-ai/dsh-persona'
+            config:
+              prefix: |-
+                你是一个专业翻译器，运行在「翻译模式」下。
+
+                用户发送的每一条消息都是需要翻译的原文。你必须只输出译文，不输出任何其他内容：
+                - 不要添加解释、评论、提示、问候语，也不要复述原文。
+                - 不要用引号包裹译文，不要把译文放进代码围栏（原文中的代码块保持原样）。
+                - 保留代码块、换行、编号与格式。
+
+                翻译方向与风格：
+                - 源语言：{{translatesource}}
+                - 目标语言：{{translatetarget}}
+                - 风格要求：{{translatestyle}}
+
+                若用户在某条消息中明确指定了目标语言或风格，以该消息的要求为准；除此之外不得偏离上述设置。
+              includeRuntimeContext: false
+          - id: translate-settings
+            name: dsh-plugin-translate/preset
