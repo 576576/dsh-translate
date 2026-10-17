@@ -1,6 +1,6 @@
 {
   "name": "dsh-plugin-translate",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Translation mode for DeepSeek Harness: a translate agent preset plus source/target language and style controls in the composer.",
   "private": true,
   "license": "MIT",
@@ -11,14 +11,14 @@
     "./preset": "./lib/preset.js",
     "./client": "./lib/client.js",
     "./locale/*.json": "./locale/*.json",
-    "./icon": "./icon.svg",
+    "./icon": "./icon.png",
     "./package.json": "./package.json"
   },
   "files": [
     "lib/**/*.js",
     "cordis.patch.yml",
     "locale/*.json",
-    "icon.svg",
+    "icon.png",
     "README.md"
   ],
   "scripts": {

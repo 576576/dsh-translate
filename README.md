@@ -48,7 +48,7 @@ lib/store.js          唯一持久层：<DSH_HOME>/translate-settings.json（原
 lib/languages.js      语言标签与 target=auto 的规则渲染
 lib/client.js         客户端半体（__ModuleLoader__ 预构建；输入框工具行 + 设置页两处 slot 注册）
 locale/*.json         插件管理页标题与描述（18 种界面语言）
-icon.svg              插件图标
+icon.png              插件图标（512×512 透明背景 PNG，用户提供的 Codex 生成插画，背景已移除）
 test/                 i18n 自测 + 宿主/客户端 stub 冒烟测试
 ```
 
