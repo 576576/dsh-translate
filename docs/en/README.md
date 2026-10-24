@@ -14,7 +14,7 @@ Adds a **Translation Mode** to [DeepSeek Harness](https://github.com/deepseek-ai
 - **Composer tool row** (translate-mode sessions only): `[source ▾] [⇄] [target ▾] [style ▾]`, matching the native model and permission selectors.
 - **Language menu**: search or type a custom language (`+` to add, custom languages can be deleted); the selected language is marked with a check; with "allow the same source and target language" off, the two menus exclude each other.
 - **Target language "auto"**: the default, resolved per sentence — see below.
-- **Style menu**: the translation style saves automatically; styles can also be saved as presets, applied and deleted. When the current style matches a preset, the tool-row button shows that preset's name and the preset-name field is prefilled, so clicking "Save preset" updates it.
+- **Style menu**: the translation style saves automatically; styles can also be saved as presets, applied and deleted. When the current style matches a preset, the tool-row button shows that preset's name and the preset-name field is prefilled, so clicking "Save" updates it; "Clear preset" drops the preset and returns to the default style.
 - **Settings page**: Settings → Translation Mode — preferred source/target language, allow-same toggle, style preset management.
 - UI copy and the plugin-inventory title/description are available in 18 languages.
 

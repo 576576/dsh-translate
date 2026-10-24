@@ -1,6 +1,6 @@
 {
   "name": "dsh-plugin-translate",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "Translation mode for DeepSeek Harness: a translate agent preset plus source/target language and style controls in the composer.",
   "private": true,
   "license": "MIT",
